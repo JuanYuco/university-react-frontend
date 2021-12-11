@@ -1,0 +1,76 @@
+@font-face {
+    font-family: 'syncopate-bold';
+    src: url('/src/fonts/Syncopate-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'syncopate';
+    src: url('/src/fonts/Syncopate-Regular.ttf');
+}
+
+body {
+    background-color: #e7edf2;
+}
+
+.auth__header {
+    padding: 25px;
+}
+
+.auth__header h3 {
+    font-family: syncopate-bold;
+    font-size: 25px;
+    font-weight: bold;
+    color: #16537e;
+}
+
+.auth__elements {
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.auth__elements h3{
+    font-family: syncopate;
+    font-size: 60px;
+    color: #16537e;
+}
+
+.auth__elements form {
+    width: 40%;
+    min-width: 500px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+    margin-top: 50px;
+}
+
+.auth__elements button {
+    color: white;
+    background-color: #0f3a58;
+    width: 40%;
+    align-self: center;
+    border-radius: 50px;
+}
+
+.auth__elements a {
+    color: #0f3a58;
+    margin-top: 10px;
+    align-self: center;
+}
+
+.auth__elements small {
+    padding: 10px;
+    font-family: syncopate;
+    font-weight: bold;
+}
+
+.auth__elements input {
+    border-radius: 50px;
+    padding-left: 25px;
+}
+
