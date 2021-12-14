@@ -34,6 +34,35 @@ export const startLogin = (email, password) => {
     }
 }
 
+export const startRegister = ( user ) => {
+    return async () => {
+        Swal.fire({
+            title: 'Loading...',
+            text: 'Please wait...',
+            allowOutsideClick: false,
+            showConfirmButton: false
+        });
+
+        const resp = await fetchSinToken( 'https://localhost:44395/api/Auth/Register', user, 'POST' );
+        let title = '';
+        let mensaje = '';
+        let type = '';
+        if ( resp.status === 200 ) {
+            title = 'Proceso exitoso';
+            mensaje = 'El usuario se ha registrado correctamente';
+            type = 'success';
+        } else if ( resp.status === 400 ) {
+            const body = await resp.json();
+            title = 'Error';
+            mensaje = `${ body.Message }`;
+            type = 'error';
+        }
+
+        Swal.close();
+        Swal.fire( title, mensaje, type );
+    }
+}
+
 const login = ( user ) => {
     return {
         type: types.authLogin,
