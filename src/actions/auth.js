@@ -71,3 +71,7 @@ const login = ( user ) => {
         }
     }
 }
+
+export const logout = () => ({
+    type: types.authLogOut
+});
