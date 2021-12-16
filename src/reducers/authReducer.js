@@ -4,7 +4,8 @@ const initialState = {
     id: null,
     name: null,
     lastName: null,
-    email: null
+    email: null,
+    validate: false
 }
 
 export const authReducter = ( state = initialState, action ) => {
@@ -12,11 +13,18 @@ export const authReducter = ( state = initialState, action ) => {
         case types.authLogin:
             return {
                 ...state,
-                ...action.payload
+                ...action.payload,
+                validate: true
             }
         case types.authLogOut:
             return {
-                ...initialState
+                ...initialState,
+                validate: true
+            }
+        case types.authValidate:
+            return {
+                validate: true,
+                ...action.payload
             }
         default:
             return state;

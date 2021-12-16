@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { fetchSinToken } from "../helpers/fetch";
+import { fetchConToken, fetchSinToken } from "../helpers/fetch";
 import { types } from "../types/types";
 
 export const startLogin = (email, password) => {
@@ -16,21 +16,30 @@ export const startLogin = (email, password) => {
             password
         };
 
-        const resp = await fetchSinToken( 'https://localhost:44395/api/Auth/Login', loginData, 'POST' );
-        if ( resp.status === 200 ) {
-            const body = await resp.json();
-            dispatch( login( body ) );
-            Swal.close();
-            return;
-        } else if ( resp.status === 400 ) {
-            const body = await resp.json();
-            console.log( body );
-            Swal.close();
-            return;
-        }
+        let badRequest = 'Sorry :(, Internal error';
+        try {
+            const resp = await fetchSinToken( 'https://localhost:44395/api/Auth/Login', loginData, 'POST' );
+            let mensaje = 'Wrong email or password';
+            if ( resp.status === 200 ) {
+                const body = await resp.json();
+                localStorage.setItem('token', body.token );
+                dispatch( login( body ) );
+                Swal.close();
+                return;
+            } else if ( resp.status === 400 ) {
+                await resp.json();
+                Swal.close();
+                return;
+            } else if ( resp.status === 500 ) {
+                mensaje = badRequest;
+            }
 
-        Swal.close();
-        Swal.fire( 'Error', 'Wrong email or password', 'error' );
+            Swal.close();
+            Swal.fire( 'Error', mensaje, 'error' );
+        } catch ( error ) {
+            Swal.close();
+            Swal.fire('Error', badRequest, 'error');
+        }
     }
 }
 
@@ -43,25 +52,67 @@ export const startRegister = ( user ) => {
             showConfirmButton: false
         });
 
-        const resp = await fetchSinToken( 'https://localhost:44395/api/Auth/Register', user, 'POST' );
-        let title = '';
-        let mensaje = '';
-        let type = '';
-        if ( resp.status === 200 ) {
-            title = 'Proceso exitoso';
-            mensaje = 'El usuario se ha registrado correctamente';
-            type = 'success';
-        } else if ( resp.status === 400 ) {
-            const body = await resp.json();
-            title = 'Error';
-            mensaje = `${ body.Message }`;
-            type = 'error';
-        }
+        let badRequest = 'Sorry :(, Internal error';
+        try {
+            const resp = await fetchSinToken( 'https://localhost:44395/api/Auth/Register', user, 'POST' );
+            let title = '';
+            let mensaje = '';
+            let type = '';
+            if ( resp.status === 200 ) {
+                title = 'Proceso exitoso';
+                mensaje = 'El usuario se ha registrado correctamente';
+                type = 'success';
+            } else if ( resp.status === 400 ) {
+                const body = await resp.json();
+                title = 'Error';
+                mensaje = `${ body.Message }`;
+                type = 'error';
+            } else if ( resp.status === 500 ) {
+                title = 'Error';
+                mensaje = badRequest;
+                type = 'error';
+            }
 
-        Swal.close();
-        Swal.fire( title, mensaje, type );
+            Swal.close();
+            Swal.fire( title, mensaje, type );
+        } catch ( error ) {
+            Swal.close();
+            Swal.fire( 'Error', badRequest, 'error' );
+        }
     }
 }
+
+export const startValidate = () => {
+    return async ( dispatch ) => {
+        try {
+            const resp = await fetchConToken( 'https://localhost:44395/api/Auth/Validate' );
+            if ( resp.status === 200 ) {
+                const body = await resp.json();
+                dispatch( validate( body ) );
+            } else if ( resp.status === 401 ) {
+                dispatch( startLogout() );
+            } else if ( resp.status === 500 ) {
+                dispatch( startLogout() );
+            }
+        } catch ( error ) {
+            dispatch( startLogout() );
+        }
+    }
+}
+
+export const startLogout = () => {
+    return ( dispatch ) => {
+        localStorage.removeItem('token');
+        dispatch( logout() );
+    }
+}
+
+const validate = (user) => ({
+    type: types.authValidate,
+    payload: {
+        ...user
+    }
+});
 
 const login = ( user ) => {
     return {
@@ -72,6 +123,6 @@ const login = ( user ) => {
     }
 }
 
-export const logout = () => ({
+const logout = () => ({
     type: types.authLogOut
 });
