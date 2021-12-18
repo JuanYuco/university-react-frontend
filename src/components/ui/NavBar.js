@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { startLogout } from '../../actions/auth';
 
 export const NavBar = () => {
@@ -14,8 +14,14 @@ export const NavBar = () => {
     return (
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
             <Link className="navbar-brand" to="/" >University</Link>
-            <div className="collapse navbar-collapse" id="navbarNavDropdown">
+            <div className="navbar-collapse">
                 <div className="navbar-nav">
+                    <NavLink 
+                        className={ ( { isActive } ) => "nav-item nav-link " + ( ( isActive ) ? 'active' : '' ) }
+                        to="/Courses"
+                    >
+                        Courses
+                    </NavLink>
                 </div>
             </div>
             <div className="navbar-collapse collapse w-100 order-3 dual-collapse2 d-flex justify-content-end">
