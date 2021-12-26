@@ -2,7 +2,12 @@ import { types } from "../types/types";
 
 const initialState = {
     loading: false,
-    courses: []
+    courses: [],
+    active: {
+        CourseID: '',
+        Title: '',
+        Credits: ''
+    }
 };
 
 export const coursesReducer = ( state = initialState, action ) => {
@@ -16,6 +21,16 @@ export const coursesReducer = ( state = initialState, action ) => {
             return {
                 ...state,
                 courses: [ ...action.payload ]
+            }
+        case types.coursesSetActive:
+            return {
+                ...state,
+                active: action.payload
+            }
+        case types.coursesResetActive: 
+            return {
+                ...state,
+                active: initialState.active
             }
         default:
             return state;

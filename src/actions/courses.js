@@ -31,3 +31,12 @@ const get = ( courses ) => ({
     type: types.coursesGet,
     payload: courses
 });
+
+export const setActiveCourse = ( course ) => ({
+    type: types.coursesSetActive,
+    payload: course
+});
+
+export const resetActiveCourse = () => ({
+    type: types.coursesResetActive
+});

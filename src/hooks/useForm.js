@@ -10,5 +10,5 @@ export const useForm = ( initialState = {} ) => {
         });
     }
 
-    return [ formValues, handleInputChange ]
+    return [ formValues, handleInputChange, setFormValues ]
 }
