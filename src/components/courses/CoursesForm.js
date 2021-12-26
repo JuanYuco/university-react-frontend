@@ -1,10 +1,23 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { startCreateCourse, startUpdateCourse } from '../../actions/courses';
 import { useForm } from '../../hooks/useForm';
 
 export const CoursesForm = () => {
+    const dispatch = useDispatch();
     const active = useSelector( state => state.courses.active );
     const [ { CourseID, Title, Credits }, handleInputChange, setFormValues ] = useForm(active);
+
+    const createOrUpdate = ( e ) => {
+        e.preventDefault();
+        const course = { CourseID, Title, Credits };
+        if ( !active.CourseID ) {
+            dispatch( startCreateCourse(course) );
+            return;
+        }
+        
+        dispatch( startUpdateCourse(course) );
+    }
 
     useEffect( () => {
         setFormValues( ( values ) => ({ ...values, ...active }) );
@@ -12,7 +25,7 @@ export const CoursesForm = () => {
 
     const titleText = ( active.CourseID ) ? 'Update' : 'Create';
     return (
-        <form>
+        <form onSubmit={ createOrUpdate }>
             <h2>{ titleText } Course</h2>
             <h6 className="mb-0">Course ID</h6>
             <input

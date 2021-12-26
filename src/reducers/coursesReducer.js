@@ -32,6 +32,25 @@ export const coursesReducer = ( state = initialState, action ) => {
                 ...state,
                 active: initialState.active
             }
+        case types.coursesCreate:
+            return {
+                ...state,
+                courses: [ ...state.courses, action.payload ]
+            }
+        case types.coursesUpdate:
+            return {
+                ...state,
+                courses: state.courses.map( course => ( 
+                    ( course.CourseID === action.payload.CourseID )
+                    ? action.payload
+                    : course
+                 ))
+            }
+        case types.courseDelete:
+            return {
+                ...state,
+                courses: state.courses.filter( course => course.CourseID !== action.payload )
+            }
         default:
             return state;
     }

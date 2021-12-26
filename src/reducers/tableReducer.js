@@ -5,7 +5,9 @@ const initialState = {
     key: null,
     stateName: null,
     subState: null,
-    update: function(){}
+    update: null,
+    create: null,
+    delete: null
 };
 
 export const tableReducer = ( state = initialState, action ) => {

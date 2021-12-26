@@ -4,7 +4,7 @@ import { Wait } from '../wait/Wait';
 import { RowRender } from './RowRender';
 
 export const TableRender = () => {
-    const { properties, key, stateName, subState, create } = useSelector( state => state.table );
+    const { properties, key, stateName, subState, create, update, delete:deleteFunction } = useSelector( state => state.table );
     const state = useSelector( state => ( subState ) ? state[ stateName ][ subState ] : state[stateName] );
     if ( !state || state.length === 0 ) return <Wait />;
     return (
@@ -25,8 +25,14 @@ export const TableRender = () => {
                                 </th>
                             ))
                         }
-                        <th></th>
-                        <th></th>
+                        {
+                            ( update ) &&
+                            <th></th>
+                        }
+                        {
+                            ( deleteFunction ) &&
+                            <th></th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
