@@ -9,6 +9,10 @@ export const types = {
     coursesCreate: '[Courses] Create',
     coursesUpdate: '[Courses] Update',
     courseDelete: '[Courses] Delete',
+    instructorsGet: '[Instructors] Get',
+    instructorsGetState: '[Instructors] Get State',
+    instructorsSetActive: '[Instructors] Set Active',
+    instructorsResetActive: '[Instructors] Reset Active',
     tableSetParameters: '[Table] Set Parameters',
     tableResetParameters: '[Table] Reset Parameters'
 }
