@@ -34,6 +34,7 @@ export const CoursesForm = () => {
                 name="CourseID"
                 value={ CourseID }
                 onChange={ handleInputChange }
+                placeholder="Course ID"
                 required
             />
             <h6 className="mb-0">Title</h6>
@@ -43,6 +44,7 @@ export const CoursesForm = () => {
                 name="Title"
                 value={ Title }
                 onChange={ handleInputChange }
+                placeholder="Title"
                 required
             />
             <h6 className="mb-0">Credits</h6>
@@ -52,6 +54,7 @@ export const CoursesForm = () => {
                 name="Credits"
                 value={ Credits }
                 onChange={ handleInputChange }
+                placeholder="Credits"
                 required
                 min="1"
             />

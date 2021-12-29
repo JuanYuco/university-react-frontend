@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';
-import { setActiveInstructor, setActiveInstructorCreate, startGetInstructors } from '../../actions/instructors';
+import { setActiveInstructor, setActiveInstructorCreate, startDeleteInstructors, startGetInstructors } from '../../actions/instructors';
 import { startParameters } from '../../actions/table';
 import { TableRender } from '../table/TableRender';
 import { InstructorsForm } from './InstructorsForm';
@@ -24,8 +24,12 @@ export const InstructosScreen = () => {
             confirmButtonText: 'Eliminar',
             showCancelButton: true,
             cancelButtonText: 'Cancelar'
-        })
-    }, []);
+        }).then( ( result ) => {
+            if ( result.isConfirmed ) {
+                dispatch( startDeleteInstructors( instructor.ID ) );
+            }
+        });
+    }, [ dispatch ]);
 
     useEffect( () => {
         dispatch( startGetInstructors() );

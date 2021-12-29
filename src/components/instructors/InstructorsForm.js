@@ -1,28 +1,32 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { startCreateInstructors, startUpdateInstructors } from '../../actions/instructors';
 import { useForm } from '../../hooks/useForm';
 
 export const InstructorsForm = () => {
+    const dispatch = useDispatch();
     const active = useSelector( state => state.instructors.active );
     const [ { ID, FirstMidName, LastName, HireDate }, handleInputChange, setFormValues ] = useForm( active );
 
     const handleSubmit = ( e ) => {
         e.preventDefault();
         if ( !ID ) {
-            console.log('Create Instructor');
+            dispatch( startCreateInstructors( { FirstMidName, LastName, HireDate } ) );
             return;
         }
 
-        console.log( 'Update Instructor' );
+        dispatch( startUpdateInstructors( { ID, FirstMidName, LastName, HireDate } ) );
     }
 
     useEffect( () => { 
         setFormValues( ( values ) => ({ ...values, ...active }) );
     }, [ setFormValues, active ]);
 
+    const titulo = ( active.ID ) ? 'Update' : 'Create';
+
     return (
         <form onSubmit={ handleSubmit }>
-            <h2>Crear Instructor</h2>
+            <h2>{ titulo } Instructor</h2>
             <h6 className="mb-0">First Mid Name</h6>
             <input
                 name="FirstMidName"

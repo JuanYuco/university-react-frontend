@@ -37,6 +37,30 @@ export const instructorsReducer = ( state = initialState, action ) => {
                     ...initialState.active
                 }
             }
+        case types.instructorsCreate:
+            return {
+                ...state,
+                instructors: [
+                    ...state.instructors,
+                    action.payload
+                ]
+            }
+        case types.instructorsUpdate:
+            return {
+                ...state,
+                instructors: [
+                    ...state.instructors.map( ( i ) => (
+                        ( i.ID === action.payload.ID ) ? action.payload : i
+                    ))
+                ]
+            }
+        case types.instructorsDelete:
+            return {
+                ...state,
+                instructors: [
+                    ...state.instructors.filter( i => i.ID !== action.payload )
+                ]
+            }
         default:
             return state;
     }
