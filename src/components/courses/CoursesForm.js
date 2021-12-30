@@ -3,10 +3,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { startCreateCourse, startUpdateCourse } from '../../actions/courses';
 import { useForm } from '../../hooks/useForm';
 
+const initalForm = {
+    CourseID: '',
+    Title: '',
+    Credits: ''
+};
+
 export const CoursesForm = () => {
     const dispatch = useDispatch();
-    const active = useSelector( state => state.courses.active );
-    const [ { CourseID, Title, Credits }, handleInputChange, setFormValues ] = useForm(active);
+    const active = useSelector( state => state.data.active );
+    const newActive = active.hasOwnProperty('CourseID') ? active : initalForm;
+    const [ { CourseID, Title, Credits }, handleInputChange, setFormValues ] = useForm( newActive );
 
     const createOrUpdate = ( e ) => {
         e.preventDefault();
@@ -20,8 +27,8 @@ export const CoursesForm = () => {
     }
 
     useEffect( () => {
-        setFormValues( ( values ) => ({ ...values, ...active }) );
-    }, [ active, setFormValues ]);
+        setFormValues( ( values ) => ({ ...values, ...newActive }) );
+    }, [ active, setFormValues, newActive ]);
 
     const titleText = ( active.CourseID ) ? 'Update' : 'Create';
     return (

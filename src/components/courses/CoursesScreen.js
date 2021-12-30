@@ -1,20 +1,21 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { resetActiveCourse, setActiveCourse, startDeleteCourse, startGetCourses } from '../../actions/courses';
+import { startDeleteCourse, startGetCourses } from '../../actions/courses';
 import { startParameters } from '../../actions/table';
 import { TableRender } from '../table/TableRender';
 import { CoursesForm } from './CoursesForm';
 import Swal from 'sweetalert2';
+import { setActiveData, setResetActiveData } from '../../actions/data';
 
 export const CoursesScreen = () => {
     const dispatch = useDispatch();
 
     const setActiveUpdate = useCallback( ( course ) => {
-        dispatch( setActiveCourse( course ) );
+        dispatch( setActiveData( course ) );
     },[ dispatch ]);
 
     const setActiveCreate = useCallback( () => {
-        dispatch( resetActiveCourse() );
+        dispatch( setResetActiveData() );
     }, [dispatch]);
 
     const deleteAlert = useCallback( ( course ) => {
@@ -40,8 +41,8 @@ export const CoursesScreen = () => {
                 { title: 'Credits', name: 'Credits' }
             ],
             key:'CourseID',
-            stateName: 'courses',
-            subState: 'courses',
+            stateName: 'data',
+            subState: 'data',
             create: setActiveCreate,
             update: setActiveUpdate,
             delete: deleteAlert
