@@ -1,26 +1,26 @@
 import { fetchConToken } from "../helpers/fetch";
 import { closeSwal, mensajeSwal, loadingSwal } from "../helpers/loading";
-import { types } from "../types/types";
+import { createData, deleteData, getData, setStateData, updateData } from "./data";
 
 const url = 'https://localhost:44395/api/Instructor';
 const internalError = 'Hubo un error interno comuniquese con el administrador';
 export const startGetInstructors = () => {
     return async ( dispatch ) => {
-        dispatch( stateGet( true ) );
+        dispatch( setStateData( true ) );
         try {
             const resp = await fetchConToken( `${ url }/GetAll` );
             if ( resp.status === 200 ) {
                 const body = await resp.json();
-                dispatch( get( body ) );
-                dispatch( stateGet( false ) );
+                dispatch( getData( body ) );
+                dispatch( setStateData( false ) );
             } else if ( resp.status === 401 ) {
-                dispatch( get( [] ) );
-                dispatch( stateGet( false ) );
+                dispatch( getData( [] ) );
+                dispatch( setStateData( false ) );
                 window.location.reload();
             }
         } catch ( error ) {
-            dispatch( get( [] ) );
-            dispatch( stateGet( false ) );
+            dispatch( getData( [] ) );
+            dispatch( setStateData( false ) );
         }
     }
 }
@@ -33,7 +33,7 @@ export const startCreateInstructors = ( instructor ) => {
             if ( resp.body ) {
                 const body = await resp.json();
                 if ( resp.status === 200 ) {
-                    dispatch( createInstructor( body ) );
+                    dispatch( createData( body ) );
                     closeSwal();
                     mensajeSwal( 'Proceso exitoso', 'Instructor creado con exito', 'success' );
                 } else if ( resp.status === 400 || resp.status === 500 ) {
@@ -58,7 +58,7 @@ export const startUpdateInstructors = ( instructor ) => {
             if ( resp.body ) {
                 const body = await resp.json();
                 if ( resp.status === 200 ) {
-                    dispatch( updateInstructor( body ) );
+                    dispatch( updateData( 'ID', body ) );
                     closeSwal();
                     mensajeSwal( 'Proceso exitoso', 'Instructor modificado con exito', 'success' );
                 } else if ( resp.status === 400 || resp.status === 500 ) {
@@ -81,7 +81,7 @@ export const startDeleteInstructors = ( instructorID ) => {
         try {
             const resp = await fetchConToken( `${ url }/Delete?id=${ instructorID }`, {}, 'DELETE' );
             if ( resp.status === 200 ) {
-                dispatch( deleteInstructor( instructorID ) );
+                dispatch( deleteData( 'ID', instructorID ) );
                 closeSwal();
                 mensajeSwal( 'Proceso exitoso', 'Instructor modificado con exito', 'success' );
             } 
@@ -99,37 +99,3 @@ export const startDeleteInstructors = ( instructorID ) => {
         }
     }
 }
-
-const createInstructor = ( instructor ) => ({
-    type: types.instructorsCreate,
-    payload: instructor
-});
-
-const updateInstructor = ( instructor ) => ({
-    type: types.instructorsUpdate,
-    payload: instructor
-});
-
-const deleteInstructor = ( instructorID ) => ({
-    type: types.instructorsDelete,
-    payload: instructorID
-});
-
-export const setActiveInstructor = ( instructor ) => ({
-    type: types.instructorsSetActive,
-    payload: instructor
-});
-
-export const setActiveInstructorCreate = () => ({
-    type: types.instructorsResetActive
-});
-
-const stateGet = ( state ) => ({
-    type: types.instructorsGetState,
-    payload: state
-});
-
-const get = ( instructors ) => ({
-    type: types.instructorsGet,
-    payload: [ ...instructors ]
-});

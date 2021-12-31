@@ -1,20 +1,21 @@
 import React, { useCallback, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';
-import { setActiveInstructor, setActiveInstructorCreate, startDeleteInstructors, startGetInstructors } from '../../actions/instructors';
+import { startDeleteInstructors, startGetInstructors } from '../../actions/instructors';
 import { startParameters } from '../../actions/table';
 import { TableRender } from '../table/TableRender';
 import { InstructorsForm } from './InstructorsForm';
+import { setActiveData, setResetActiveData } from '../../actions/data';
 
 export const InstructosScreen = () => {
     const dispatch = useDispatch();
 
     const setActiveUpdate = useCallback( ( instructor ) => {
-        dispatch( setActiveInstructor( instructor ) );
+        dispatch( setActiveData( instructor ) );
     }, [ dispatch ]);
 
     const setActiveCreate = useCallback( () => {
-        dispatch( setActiveInstructorCreate() );
+        dispatch( setResetActiveData() );
     }, [ dispatch ]);
 
     const deleteInstructorAlert = useCallback( ( instructor ) => {
@@ -41,8 +42,8 @@ export const InstructosScreen = () => {
                 { title: 'Hire Date', name: 'HireDate' }
             ],
             key:'ID',
-            stateName: 'instructors',
-            subState: 'instructors',
+            stateName: 'data',
+            subState: 'data',
             update: setActiveUpdate,
             create: setActiveCreate,
             delete: deleteInstructorAlert

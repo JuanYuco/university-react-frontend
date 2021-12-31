@@ -10,13 +10,6 @@ export const types = {
     dataUpdate: '[Data] Update',
     dataDelete: '[Data] Delete',
     dataReset: '[Data] Reset',
-    instructorsGet: '[Instructors] Get',
-    instructorsGetState: '[Instructors] Get State',
-    instructorsSetActive: '[Instructors] Set Active',
-    instructorsResetActive: '[Instructors] Reset Active',
-    instructorsCreate: '[Instructors] Create',
-    instructorsUpdate: '[Instructors] Update',
-    instructorsDelete: '[Instructors] Delete',
     tableSetParameters: '[Table] Set Parameters',
     tableResetParameters: '[Table] Reset Parameters'
 }

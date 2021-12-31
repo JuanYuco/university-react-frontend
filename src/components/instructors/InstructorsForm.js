@@ -3,10 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { startCreateInstructors, startUpdateInstructors } from '../../actions/instructors';
 import { useForm } from '../../hooks/useForm';
 
+const initialForm = {
+    ID: '',
+    LastName: '',
+    FirstMidName: '',
+    HireDate: ''
+};
+
 export const InstructorsForm = () => {
     const dispatch = useDispatch();
-    const active = useSelector( state => state.instructors.active );
-    const [ { ID, FirstMidName, LastName, HireDate }, handleInputChange, setFormValues ] = useForm( active );
+    const active = useSelector( state => state.data.active );
+    const newActive = active.hasOwnProperty('ID') ? active : initialForm;
+    const [ { ID, FirstMidName, LastName, HireDate }, handleInputChange, setFormValues ] = useForm( newActive );
 
     const handleSubmit = ( e ) => {
         e.preventDefault();
@@ -19,8 +27,8 @@ export const InstructorsForm = () => {
     }
 
     useEffect( () => { 
-        setFormValues( ( values ) => ({ ...values, ...active }) );
-    }, [ setFormValues, active ]);
+        setFormValues( ( values ) => ({ ...values, ...newActive }) );
+    }, [ setFormValues, newActive ]);
 
     const titulo = ( active.ID ) ? 'Update' : 'Create';
 
