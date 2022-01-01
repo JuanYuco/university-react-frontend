@@ -1,6 +1,8 @@
 import Swal from "sweetalert2";
 import { fetchConToken, fetchSinToken } from "../helpers/fetch";
 import { types } from "../types/types";
+import { resetData } from "./data";
+import { startResetParametes } from "./table";
 
 export const startLogin = (email, password) => {
     return async ( dispatch ) => {
@@ -103,6 +105,8 @@ export const startValidate = () => {
 export const startLogout = () => {
     return ( dispatch ) => {
         localStorage.removeItem('token');
+        dispatch( startResetParametes() );
+        dispatch( resetData() );
         dispatch( logout() );
     }
 }
