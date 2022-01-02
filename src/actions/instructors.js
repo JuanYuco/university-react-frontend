@@ -1,4 +1,5 @@
 import { fetchConToken } from "../helpers/fetch";
+import { getInstructors } from "../helpers/Instructors";
 import { closeSwal, mensajeSwal, loadingSwal } from "../helpers/loading";
 import { createData, deleteData, getData, setStateData, updateData } from "./data";
 
@@ -8,12 +9,11 @@ export const startGetInstructors = () => {
     return async ( dispatch ) => {
         dispatch( setStateData( true ) );
         try {
-            const resp = await fetchConToken( `${ url }/GetAll` );
-            if ( resp.status === 200 ) {
-                const body = await resp.json();
+            const { status, data:body } = await getInstructors();
+            if ( status === 200 ) {
                 dispatch( getData( body ) );
                 dispatch( setStateData( false ) );
-            } else if ( resp.status === 401 ) {
+            } else if ( status === 401 ) {
                 dispatch( getData( [] ) );
                 dispatch( setStateData( false ) );
                 window.location.reload();

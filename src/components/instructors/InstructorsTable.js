@@ -7,7 +7,7 @@ import { TableRender } from '../table/TableRender';
 import { InstructorsForm } from './InstructorsForm';
 import { setActiveData, setResetActiveData } from '../../actions/data';
 
-export const InstructosScreen = () => {
+export const InstructorsTable = () => {
     const dispatch = useDispatch();
 
     const setActiveUpdate = useCallback( ( instructor ) => {
