@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getInstructors } from '../../helpers/Instructors';
 import { useForm } from '../../hooks/useForm';
+import { Select } from '../ui/Select';
 
 const initialForm = {
     InstructorID: 0,
@@ -13,11 +14,18 @@ export const OfficeAssignmentForm = () => {
     const active = useSelector( state => state.data.active );
     const newActive = active.hasOwnProperty('InstructorID') ? active : initialForm;
     const [ { InstructorID, Location }, handleInputChange, setFormValues ] = useForm( newActive );
+
+    const handleSelectChange = useCallback( ( e ) => {
+        handleInputChange( e );
+    }, [ handleInputChange ]);
+
     useEffect( () => {
-        console.log('Carga');
         (async () => {
             const { data } = await getInstructors();
-            setInstructors( data );
+            setInstructors( data.map( ins => ({
+                val: ins.ID,
+                name: `${ ins.FirstMidName } ${ ins.LastName }`
+            })) );
         })()
     }, [ setInstructors ]);
 
@@ -28,19 +36,13 @@ export const OfficeAssignmentForm = () => {
     return (
         <form>
             <h6 className="mb-0">Instructor</h6>
-            <select
-                className="form-control mb-1"
-                name="ID"
+            <Select
+                data={ instructors }
+                pref="Ins"
+                name="InstructorID"
                 value={ InstructorID }
-                onChange={ handleInputChange }
-            >
-                <option value={ 0 }>Seleccione un Instructor</option>
-                {
-                    instructors.map( ( { ID, FirstMidName, LastName } ) => (
-                        <option key={ `opIn${ ID }` } value={ ID }>{ `${ FirstMidName } ${ LastName }` }</option>
-                    ))
-                }
-            </select>
+                handleInputChange={ handleSelectChange }
+            />
             <h6 className="mb-0">Location</h6>
             <input
                 type="text"
