@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { getInstructors } from '../../helpers/Instructors';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { startCreateOfficesAssignment, startUpdateOfficesAssignment } from '../../actions/officesAssignment';
 import { useForm } from '../../hooks/useForm';
-import { Select } from '../ui/Select';
+import { InstructorSelect } from '../instructors/InstructorSelect';
 
 const initialForm = {
     InstructorID: 0,
@@ -10,38 +10,32 @@ const initialForm = {
 }
 
 export const OfficeAssignmentForm = () => {
-    const [ instructors, setInstructors ] = useState( [] );
+    const dispatch = useDispatch();
     const active = useSelector( state => state.data.active );
     const newActive = active.hasOwnProperty('InstructorID') ? active : initialForm;
     const [ { InstructorID, Location }, handleInputChange, setFormValues ] = useForm( newActive );
 
-    const handleSelectChange = useCallback( ( e ) => {
-        handleInputChange( e );
-    }, [ handleInputChange ]);
+    const handleSubmit = ( e ) => {
+        e.preventDefault();
+        
+        if ( !active.InstructorID ) {
+            dispatch( startCreateOfficesAssignment( { InstructorID, Location } ) );
+            return;
+        }
 
-    useEffect( () => {
-        (async () => {
-            const { data } = await getInstructors();
-            setInstructors( data.map( ins => ({
-                val: ins.ID,
-                name: `${ ins.FirstMidName } ${ ins.LastName }`
-            })) );
-        })()
-    }, [ setInstructors ]);
+        dispatch( startUpdateOfficesAssignment( { InstructorID, Location } ) );
+    }
 
     useEffect( () =>  {
         setFormValues( value => ({ ...value, ...newActive }) );
     }, [ newActive, setFormValues ]);
 
     return (
-        <form>
+        <form onSubmit={ handleSubmit }>
             <h6 className="mb-0">Instructor</h6>
-            <Select
-                data={ instructors }
-                pref="Ins"
-                name="InstructorID"
+            <InstructorSelect
                 value={ InstructorID }
-                handleInputChange={ handleSelectChange }
+                handleInputChange={ handleInputChange }
             />
             <h6 className="mb-0">Location</h6>
             <input
