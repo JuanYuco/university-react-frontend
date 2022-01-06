@@ -40,6 +40,12 @@ export const NavBar = () => {
                     >
                         Offices
                     </NavLink>
+                    <NavLink
+                        className={ ( { isActive } ) => "nav-item nav-link " + ( ( isActive ) ? 'active' : '' ) }
+                        to="/Departments"
+                    >
+                        Departments
+                    </NavLink>
                 </div>
             </div>
             <div className="navbar-collapse collapse w-100 order-3 dual-collapse2 d-flex justify-content-end">
