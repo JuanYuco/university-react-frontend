@@ -11,32 +11,32 @@ export const dataReducer = ( state = initialState, action ) => {
         case types.dataGet:
             return {
                 ...state,
-                data: [ ...action.payload ]
+                [ action.payload.property ]: [ ...action.payload.data ]
             }
         case types.dataGetState:
             return {
                 ...state,
-                loading: action.payload
+                [ action.payload.property ]: action.payload.isLoading
             }
         case types.dataSetActive:
             return {
                 ...state,
-                active: action.payload
+                [ action.payload.property ]: action.payload.active
             }
         case types.dataResetActive:
             return {
                 ...state,
-                active: initialState.active
+                [ action.payload ]: initialState[ action.payload ] || {}
             }
         case types.dataCreate:
             return {
                 ...state,
-                data: [ ...state.data, action.payload ]
+                [ action.payload.property ]: [ ...state[ action.payload.property ], action.payload.data ]
             }
         case types.dataUpdate: 
             return {
                 ...state,
-                data: [ ...state.data.map( d => (
+                [ action.payload.property ]: [ ...state[ action.payload.property ].map( d => (
                         d[ action.payload.id ] === action.payload.data[ action.payload.id ] 
                         ? action.payload.data 
                         : d
@@ -46,7 +46,7 @@ export const dataReducer = ( state = initialState, action ) => {
         case types.dataDelete:
             return {
                 ...state,
-                data: [ ...state.data.filter( d => d[ action.payload.id ] !== action.payload.data ) ]
+                [ action.payload.property ]: [ ...state[ action.payload.property ].filter( d => d[ action.payload.id ] !== action.payload.data ) ]
             }
         case types.dataReset:
             return initialState
