@@ -2,6 +2,7 @@ import { fetchConToken } from "../helpers/fetch";
 import { createData, deleteData, getData, setStateData, updateData } from "./data";
 import { closeSwal, loadingSwal, mensajeSwal } from "../helpers/loading";
 
+const url = 'https://localhost:44395/api/CourseInstructor';
 export const startGetCourses = () => {
     return async ( dispatch ) => {
         dispatch( setStateData( true ) );
@@ -91,3 +92,37 @@ export const startDeleteCourse = ( courseId ) => {
         }
     }
 }
+
+export const startGetCourseInstructor = ( CourseID ) => {
+    return async ( dispatch ) => {
+        const propertyStateName = 'secondData';
+        const loading = 'secondLoading';
+        dispatch( setStateData( true, loading ) );
+        try {
+            const resp = await fetchConToken( `${ url }/GetByCourse?id=${ CourseID }` );
+            const { status } = resp;
+            if ( status === 401 ) {
+                window.location.reload();
+                return;
+            }
+
+            if ( status === 200 ) {
+                const body = await resp.json();
+                const newBody = body.map( courseIns => ( courseInstructorTransform( courseIns ) ));
+                dispatch( getData( newBody, propertyStateName ) );
+                dispatch( setStateData( false, loading ) );
+            } else {
+                dispatch( getData( [], propertyStateName ) );
+                dispatch( setStateData( false, loading ) );
+            }
+        } catch ( error ) {
+            dispatch( getData( [], propertyStateName ) );
+            dispatch( setStateData( false, loading ) );
+        }
+    }
+}
+
+const courseInstructorTransform = ( data ) => ({
+    ...data,
+    Instructor: `${ data.Instructor.FirstMidName } ${ data.Instructor.LastName }`
+});

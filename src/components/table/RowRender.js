@@ -1,13 +1,15 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useContext } from 'react';
+import { TableContext } from './tableContext';
 
 export const RowRender = ( { row } ) => {
-    const { properties, update, key, delete: deleteFunction } = useSelector( state => state.table );
+    const { table : tableParameters } = useContext( TableContext );
+    const { properties, update, key, delete: deleteFunction, dif } = tableParameters;
+    
     return (
         <tr>
             {
                 properties.map( ( { name } ) => (
-                    <td key={ `td${ row[key] }${ name }` }>{ row[ name ] }</td>
+                    <td key={ `td${ dif }${ row[key] }${ name }` }>{ row[ name ] }</td>
                 ))
             }
             {

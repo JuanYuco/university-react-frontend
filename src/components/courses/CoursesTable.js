@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { startDeleteCourse, startGetCourses } from '../../actions/courses';
-import { startParameters } from '../../actions/table';
-import { TableRender } from '../table/TableRender';
 import { CoursesForm } from './CoursesForm';
 import Swal from 'sweetalert2';
 import { setActiveData, setResetActiveData } from '../../actions/data';
+import { TableStart } from '../table/TableStart';
 
 export const CoursesTable = () => {
     const dispatch = useDispatch();
+    const { data, loading } = useSelector( state => state.data );
 
     const setActiveUpdate = useCallback( ( course ) => {
         dispatch( setActiveData( course ) );
@@ -34,27 +34,27 @@ export const CoursesTable = () => {
 
     useEffect(() => {
         dispatch( startGetCourses() );
-        const parameters = {
-            properties: [
-                { title: 'Id', name: 'CourseID' },
-                { title: 'Title', name: 'Title' },
-                { title: 'Credits', name: 'Credits' }
-            ],
-            key:'CourseID',
-            stateName: 'data',
-            subState: 'data',
-            create: setActiveCreate,
-            update: setActiveUpdate,
-            delete: deleteAlert
-        }
+    }, [ dispatch ]);
 
-        dispatch( startParameters( parameters ) );
-    }, [ dispatch, setActiveUpdate, setActiveCreate, deleteAlert ]);
+    const parameters = {
+        properties: [
+            { title: 'Id', name: 'CourseID' },
+            { title: 'Title', name: 'Title' },
+            { title: 'Credits', name: 'Credits' }
+        ],
+        key:'CourseID',
+        data: data,
+        loading: loading,
+        create: setActiveCreate,
+        update: setActiveUpdate,
+        delete: deleteAlert,
+        dif: 'Courses'
+    };
 
     return (
         <div className="m-3 row">
             <div className="col-6">
-                <TableRender />
+                <TableStart parameters={ parameters } />
             </div>
             <div className="col-6">
                 <CoursesForm />
