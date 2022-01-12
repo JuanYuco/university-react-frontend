@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { setActiveData, setResetActiveData } from '../../actions/data';
 import { startDeleteOfficesAssignment, startGetOfficesAssignmnet } from '../../actions/officesAssignment';
-import { startParameters } from '../../actions/table';
-import { TableRender } from '../table/TableRender';
+import { TableStart } from '../table/TableStart';
 import { OfficeAssignmentForm } from './OfficeAssignmentForm';
 
 export const OfficeAssignmentScreen = () => {
+    const { data, loading } = useSelector( state => state.data );
     const dispatch = useDispatch();
 
     const setActiveUpdate = useCallback( ( officesAssignment ) => {
@@ -34,26 +34,27 @@ export const OfficeAssignmentScreen = () => {
 
     useEffect( () => {
         dispatch( startGetOfficesAssignmnet() );
-        const parameters = {
-            properties: [
-                { title: 'Instructor ID', name: 'InstructorID' },
-                { title: 'Instructor Name', name: 'InstructorName' },
-                { title: 'Location', name: 'Location' }
-            ],
-            key:'InstructorID',
-            stateName: 'data',
-            subState: 'data',
-            update: setActiveUpdate,
-            create: setActiveCreate,
-            delete: deleteOfficeAssignment
-        };
-        dispatch( startParameters( parameters ) );
-    }, [ dispatch, setActiveUpdate, setActiveCreate, deleteOfficeAssignment ]);
+    }, [ dispatch ]);
+
+    const parameters = {
+        properties: [
+            { title: 'Instructor ID', name: 'InstructorID' },
+            { title: 'Instructor Name', name: 'InstructorName' },
+            { title: 'Location', name: 'Location' }
+        ],
+        key:'InstructorID',
+        data,
+        loading,
+        update: setActiveUpdate,
+        create: setActiveCreate,
+        delete: deleteOfficeAssignment,
+        dif: 'OfficeAssignment'
+    };
 
     return (
         <div className="m-3 row">
             <div className="col-6">
-                <TableRender />
+                <TableStart parameters={ parameters } />
             </div>
             <div className="col-6">
                 <OfficeAssignmentForm />

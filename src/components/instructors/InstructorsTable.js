@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { startDeleteInstructors, startGetInstructors } from '../../actions/instructors';
-import { startParameters } from '../../actions/table';
-import { TableRender } from '../table/TableRender';
 import { InstructorsForm } from './InstructorsForm';
 import { setActiveData, setResetActiveData } from '../../actions/data';
+import { TableStart } from '../table/TableStart';
 
 export const InstructorsTable = () => {
+    const { data, loading } = useSelector( state => state.data );
     const dispatch = useDispatch();
 
     const setActiveUpdate = useCallback( ( instructor ) => {
@@ -34,27 +34,28 @@ export const InstructorsTable = () => {
 
     useEffect( () => {
         dispatch( startGetInstructors() );
-        const parameters = {
-            properties: [
-                { title: 'Id', name: 'ID' },
-                { title: 'First Mid Name', name: 'FirstMidName' },
-                { title: 'Last Name', name: 'LastName' },
-                { title: 'Hire Date', name: 'HireDate' }
-            ],
-            key:'ID',
-            stateName: 'data',
-            subState: 'data',
-            update: setActiveUpdate,
-            create: setActiveCreate,
-            delete: deleteInstructorAlert
-        };
-        dispatch( startParameters( parameters ) );
-    }, [ dispatch, setActiveUpdate, setActiveCreate, deleteInstructorAlert ]);
+    }, [ dispatch ]);
+
+    const parameters = {
+        properties: [
+            { title: 'Id', name: 'ID' },
+            { title: 'First Mid Name', name: 'FirstMidName' },
+            { title: 'Last Name', name: 'LastName' },
+            { title: 'Hire Date', name: 'HireDate' }
+        ],
+        key:'ID',
+        data,
+        loading,
+        update: setActiveUpdate,
+        create: setActiveCreate,
+        delete: deleteInstructorAlert,
+        dif: 'Instructor'
+    };
 
     return (
         <div className="m-3 row">
             <div className="col-6">
-                <TableRender />
+                <TableStart parameters={ parameters }/>
             </div>
             <div className="col-6">
                 <InstructorsForm />

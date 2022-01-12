@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { setActiveData, setResetActiveData } from '../../actions/data';
 import { startDeleteStudent, startGetStudents } from '../../actions/students';
-import { startParameters } from '../../actions/table';
-import { TableRender } from '../table/TableRender';
+import { TableStart } from '../table/TableStart';
 import { StudentsForm } from './StudentsForm';
 
 export const StudentsScreen = () => {
+    const { data, loading } = useSelector( state => state.data );
     const dispatch = useDispatch();
 
     const setActiveUpdate = useCallback( ( student ) => {
@@ -34,29 +34,28 @@ export const StudentsScreen = () => {
 
     useEffect( () => {
         dispatch( startGetStudents() );
+    }, [ dispatch ]);
 
-        const parameters = {
-            properties: [
-                { title: 'Id', name: 'ID' },
-                { title: 'First Mid Name', name: 'FirstMidName' },
-                { title: 'Last Name', name: 'LastName' },
-                { title: 'Enrollment Date', name: 'EnrollmentDate' }
-            ],
-            key:'ID',
-            stateName: 'data',
-            subState: 'data',
-            update: setActiveUpdate,
-            create: setActiveCreate,
-            delete: setDeleteStudent
-        }
-
-        dispatch( startParameters( parameters ) );
-    }, [ dispatch, setActiveUpdate, setActiveCreate, setDeleteStudent ]);
+    const parameters = {
+        properties: [
+            { title: 'Id', name: 'ID' },
+            { title: 'First Mid Name', name: 'FirstMidName' },
+            { title: 'Last Name', name: 'LastName' },
+            { title: 'Enrollment Date', name: 'EnrollmentDate' }
+        ],
+        key:'ID',
+        data,
+        loading,
+        update: setActiveUpdate,
+        create: setActiveCreate,
+        delete: setDeleteStudent,
+        dif: 'Student'
+    };
 
     return (
         <div className="row m-3">
             <div className="col-6">
-                <TableRender />
+                <TableStart parameters={ parameters }/>
             </div>
             <div className="col-6">
                 <StudentsForm />

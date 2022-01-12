@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { setActiveData, setResetActiveData } from '../../actions/data';
 import { startDeleteDepartment, startGetDepartments } from '../../actions/departments';
-import { startParameters } from '../../actions/table';
-import { TableRender } from '../table/TableRender';
+import { TableStart } from '../table/TableStart';
 import { DepartmentForm } from './DepartmentForm';
 
 export const DepartmentScreen = () => {
+    const { data, loading } = useSelector( state => state.data );
     const dispatch = useDispatch();
 
     const setActiveUpdate = useCallback( ( department ) =>  {
@@ -35,29 +35,30 @@ export const DepartmentScreen = () => {
 
     useEffect( () => {
         dispatch( startGetDepartments() );
-        const parameters = {
-            properties: [
-                { title: 'ID', name: 'DepartmentID' },
-                { title: 'Name', name: 'Name' },
-                { title: 'Budget', name:'Budget' },
-                { title: 'Start Date', name: 'StartDate' },
-                { title: 'Instructor', name: 'Instructor' }
-            ],
-            key:'DepartmentID',
-            stateName: 'data',
-            subState: 'data',
-            update: setActiveUpdate,
-            create: setActiveCreate,
-            delete: deleteDepartment
-        }
-        dispatch( startParameters( parameters ) );
-    }, [ dispatch, setActiveUpdate, setActiveCreate, deleteDepartment ]);
+    }, [ dispatch ]);
+
+    const parameters = {
+        properties: [
+            { title: 'ID', name: 'DepartmentID' },
+            { title: 'Name', name: 'Name' },
+            { title: 'Budget', name:'Budget' },
+            { title: 'Start Date', name: 'StartDate' },
+            { title: 'Instructor', name: 'Instructor' }
+        ],
+        key:'DepartmentID',
+        data,
+        loading,
+        update: setActiveUpdate,
+        create: setActiveCreate,
+        delete: deleteDepartment,
+        dif: 'Department'
+    };
 
     return (
         <div className="row m-3">
             <div className="col-6">
                 <h3>Departments</h3>
-                <TableRender />
+                <TableStart parameters={ parameters } />
             </div>
             <div className="col-6">
                 <DepartmentForm />
