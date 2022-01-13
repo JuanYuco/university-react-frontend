@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { resetData } from '../actions/data';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { CoursesScreen } from '../components/courses/CoursesScreen';
 import { DepartmentScreen } from '../components/departments/DepartmentScreen';
 import { InstructorsScreen } from '../components/instructors/InstructorsScreen';
@@ -11,12 +9,6 @@ import { NavBar } from '../components/ui/NavBar';
 import { WelcomeScreen } from '../components/welcome/WelcomeScreen';
 
 export const DashBoardRouter = () => {
-    const { pathname } = useLocation();
-    const dispatch = useDispatch();
-    
-    useEffect( () => {
-        dispatch( resetData() );
-    }, [ dispatch, pathname ])
     return (
         <>
         <NavBar />

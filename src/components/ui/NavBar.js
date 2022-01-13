@@ -1,7 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { startLogout } from '../../actions/auth';
+import { CustomNavBar } from './CustomNavBar';
 
 export const NavBar = () => {
     const dispatch = useDispatch();
@@ -16,36 +17,11 @@ export const NavBar = () => {
             <Link className="navbar-brand" to="/" >University</Link>
             <div className="navbar-collapse">
                 <div className="navbar-nav">
-                    <NavLink 
-                        className={ ( { isActive } ) => "nav-item nav-link " + ( ( isActive ) ? 'active' : '' ) }
-                        to="/Courses"
-                    >
-                        Courses
-                    </NavLink>
-                    <NavLink
-                        className={ ( { isActive } ) => "nav-item nav-link " + ( ( isActive ) ? 'active' : '' ) }
-                        to="/Instructors"
-                    >
-                        Instructors
-                    </NavLink>
-                    <NavLink
-                        className={ ( { isActive } ) => "nav-item nav-link " + ( ( isActive ) ? 'active' : '' ) }
-                        to="/Students"
-                    >
-                        Students
-                    </NavLink>
-                    <NavLink
-                        className={ ( { isActive } ) => "nav-item nav-link " + ( ( isActive ) ? 'active' : '' ) }
-                        to="/OfficesAssignment"
-                    >
-                        Offices
-                    </NavLink>
-                    <NavLink
-                        className={ ( { isActive } ) => "nav-item nav-link " + ( ( isActive ) ? 'active' : '' ) }
-                        to="/Departments"
-                    >
-                        Departments
-                    </NavLink>
+                    <CustomNavBar to="/Courses" name="Courses"/>
+                    <CustomNavBar to="/Instructors" name="Instructors"/>
+                    <CustomNavBar to="/Students" name="Students" />
+                    <CustomNavBar to="/OfficesAssignment" name="Offices" />
+                    <CustomNavBar to="/Departments" name="Departments" />
                 </div>
             </div>
             <div className="navbar-collapse collapse w-100 order-3 dual-collapse2 d-flex justify-content-end">

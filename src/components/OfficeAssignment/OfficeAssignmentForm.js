@@ -30,8 +30,10 @@ export const OfficeAssignmentForm = () => {
         setFormValues( value => ({ ...value, ...newActive }) );
     }, [ newActive, setFormValues ]);
 
+    const title = ( active.InstructorID ) ? "Update" : "Create";
     return (
         <form onSubmit={ handleSubmit }>
+            <h3>{ title } Offices</h3>
             <h6 className="mb-0">Instructor</h6>
             <InstructorSelect
                 value={ InstructorID }

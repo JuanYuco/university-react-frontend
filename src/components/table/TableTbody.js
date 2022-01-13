@@ -5,7 +5,6 @@ import { TableContext } from './tableContext';
 export const TableTbody = () => {
     const { table : tableParameters } = useContext( TableContext );
     const { key, data, dif } = tableParameters;
-    console.log(data)
     return (
         <tbody>
             {
