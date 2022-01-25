@@ -122,6 +122,36 @@ export const startGetCourseInstructor = ( CourseID ) => {
     }
 }
 
+export const startCreateCourseInstructor = ( courseInstructor ) => {
+    return async ( dispatch ) => {
+        loadingSwal();
+        try {
+            console.log(courseInstructor);
+            const resp = await fetchConToken( `${ url }/Create`, courseInstructor, 'POST' );
+            const { status } = resp;
+            if ( status === 401 ) {
+                window.location.reload();
+                return;
+            }
+
+            const body = await resp.json();
+            if ( status === 200 ) {
+                const newBody = courseInstructorTransform( body );
+                dispatch( createData( newBody, 'secondData' ) );
+                closeSwal();
+                mensajeSwal( 'Proceso Exitoso', 'El curso se ha creado con exito', 'success' );
+            } else if (  status === 400 || status === 500 ) {
+                console.log(body);
+                closeSwal();
+                mensajeSwal('Error', body.Message, 'error');
+            }
+        } catch ( error ) {
+            closeSwal();
+            mensajeSwal( 'Error Interno', 'Comuniquese con el administrador', 'error' );
+        }
+    }
+}
+
 const courseInstructorTransform = ( data ) => ({
     ...data,
     Instructor: `${ data.Instructor.FirstMidName } ${ data.Instructor.LastName }`
