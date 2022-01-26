@@ -126,7 +126,6 @@ export const startCreateCourseInstructor = ( courseInstructor ) => {
     return async ( dispatch ) => {
         loadingSwal();
         try {
-            console.log(courseInstructor);
             const resp = await fetchConToken( `${ url }/Create`, courseInstructor, 'POST' );
             const { status } = resp;
             if ( status === 401 ) {
@@ -141,9 +140,64 @@ export const startCreateCourseInstructor = ( courseInstructor ) => {
                 closeSwal();
                 mensajeSwal( 'Proceso Exitoso', 'El curso se ha creado con exito', 'success' );
             } else if (  status === 400 || status === 500 ) {
-                console.log(body);
                 closeSwal();
                 mensajeSwal('Error', body.Message, 'error');
+            }
+        } catch ( error ) {
+            closeSwal();
+            mensajeSwal( 'Error Interno', 'Comuniquese con el administrador', 'error' );
+        }
+    }
+}
+
+export const startUpdateCourseInstructor = ( courseInstructor ) => {
+    return async ( dispatch ) => {
+        loadingSwal();
+        try {
+            const resp = await fetchConToken( `${ url }/Update`, courseInstructor, 'PUT' );
+            const { status } = resp;
+            if ( status === 401 ) {
+                window.location.reload();
+                return;
+            }
+
+            const body = await resp.json();
+            if ( status === 200 ) {
+                const newBody = courseInstructorTransform( body );
+                dispatch( updateData( 'ID', newBody, 'secondData' ) );
+                closeSwal();
+                mensajeSwal( 'Proceso Exito', 'El instructor se ha modificado con exito', 'success' );
+            } else if ( status === 400 || status === 500 ) {
+                closeSwal();
+                mensajeSwal( 'Error', body.Message, 'error' );
+            }
+        } catch ( error ) {
+            closeSwal();
+            mensajeSwal( 'Error Interno', 'Comuniquese con el administrador', 'error' );
+        }
+    }
+}
+
+export const startDeleteCourseInstructor = ( id ) => {
+    return async ( dispatch ) => {
+        loadingSwal();
+        try {
+            console.log(id);
+            const resp = await fetchConToken( `${ url }/Delete?id=${ id }`, {}, 'DELETE' );
+            const { status } = resp;
+            if ( status === 401 ) {
+                window.location.reload();
+                return;
+            }
+
+            if ( status === 200 ) {
+                dispatch( deleteData( 'ID', id, 'secondData' ) );
+                closeSwal();
+                mensajeSwal( 'Proceso Exito', 'El instructor se ha eliminado con exito', 'success' );
+            } else if ( status === 400 || status === 500 ) {
+                const body = await resp.json();
+                closeSwal();
+                mensajeSwal( 'Error', body.Message, 'error' );
             }
         } catch ( error ) {
             closeSwal();

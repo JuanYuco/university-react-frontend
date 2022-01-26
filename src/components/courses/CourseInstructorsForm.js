@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { startCreateCourseInstructor } from '../../actions/courses';
+import { startCreateCourseInstructor, startUpdateCourseInstructor } from '../../actions/courses';
 import { useForm } from '../../hooks/useForm';
 import { InstructorSelect } from '../instructors/InstructorSelect';
 
@@ -18,8 +18,8 @@ export const CourseInstructorsForm = ({ CourseID }) => {
 
     const handleSubmit = ( e ) => {
         e.preventDefault();
-
         if ( ID ) {
+            dispatch( startUpdateCourseInstructor( { ID, CourseID, InstructorID } ) );
             return;
         }
 

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { startGetCourseInstructor } from '../../actions/courses';
+import Swal from 'sweetalert2';
+import { startDeleteCourseInstructor, startGetCourseInstructor } from '../../actions/courses';
 import { setActiveData, setResetActiveData } from '../../actions/data';
 import { TableStart } from '../table/TableStart';
 import { CourseInstructorsForm } from './CourseInstructorsForm';
@@ -19,6 +20,20 @@ export const CourseInstructors = () => {
         dispatch( setResetActiveData( propertieName ) );
     }, [ dispatch ]);
 
+    const startDelete = useCallback( ( courseInstructor ) => {
+        Swal.fire({
+            title: 'Eliminar Instructor del curso',
+            text: `Esta seguro que desea elimnar el instructor ${ courseInstructor.Instructor }`,
+            confirmButtonText: 'Eliminar',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar'
+        }).then( ( result ) => {
+            if ( result.isConfirmed ){
+                dispatch( startDeleteCourseInstructor( courseInstructor.ID ) );
+            }
+        });
+    }, [ dispatch ]);
+
     useEffect( () => {
         if ( CourseID ) {
             dispatch( startGetCourseInstructor( CourseID ) );
@@ -35,7 +50,8 @@ export const CourseInstructors = () => {
         key:'ID',
         dif: 'CoursesInstructor',
         update: setActiveUpdate,
-        create: setActiveCreate
+        create: setActiveCreate,
+        delete: startDelete
     };
     return (
         <div className="m-3 row">
