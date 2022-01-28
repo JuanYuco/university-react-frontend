@@ -4,6 +4,7 @@ import { closeSwal, mensajeSwal, loadingSwal } from "../helpers/loading";
 import { createData, deleteData, getData, setStateData, updateData } from "./data";
 
 const url = 'https://localhost:44395/api/Instructor';
+const urlCI = 'https://localhost:44395/api/CourseInstructor';
 const internalError = 'Hubo un error interno comuniquese con el administrador';
 export const startGetInstructors = () => {
     return async ( dispatch ) => {
@@ -99,3 +100,37 @@ export const startDeleteInstructors = ( instructorID ) => {
         }
     }
 }
+
+export const startGetInstructorCourses = ( InstructorID ) => {
+    return async ( dispatch ) => {
+        const propertyStateName = 'secondData';
+        const loading = 'secondLoading';
+        dispatch( setStateData( true, loading ) );
+        try {
+            const resp = await fetchConToken( `${ urlCI }/GetByInstructor?id=${ InstructorID }` );
+            const { status } = resp;
+            if ( status === 401 ) {
+                window.location.reload();
+                return;
+            }
+
+            if ( status === 200 ) {
+                const body = await resp.json();
+                const newBody = body.map( d => instructorCoursesTransform( d ) );
+                dispatch( getData( newBody, propertyStateName ) );
+                dispatch( setStateData( false, loading ) );
+            } else {
+                dispatch( getData( [], propertyStateName ) );
+                dispatch( setStateData( false, loading ) );
+            }
+        } catch ( error ) {
+            dispatch( getData( [], propertyStateName ) );
+            dispatch( setStateData( false, loading ) );
+        }
+    }
+}
+
+const instructorCoursesTransform = ( data ) => ({
+    ...data,
+    Course: data.Course.Title
+});

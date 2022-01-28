@@ -1,19 +1,19 @@
 import { fetchConToken } from "../helpers/fetch";
 import { createData, deleteData, getData, setStateData, updateData } from "./data";
 import { closeSwal, loadingSwal, mensajeSwal } from "../helpers/loading";
+import { getCourses } from "../helpers/Courses";
 
 const url = 'https://localhost:44395/api/CourseInstructor';
 export const startGetCourses = () => {
     return async ( dispatch ) => {
         dispatch( setStateData( true ) );
         try {
-            const resp = await fetchConToken( 'https://localhost:44395/api/Course/GetAll' );
-            if ( resp.status === 200 ) {
-                const body = await resp.json();
+            const { status, data:body } = await getCourses();
+            if ( status === 200 ) {
                 dispatch( getData( body ) );
                 dispatch( setStateData( false ) );
-            } else if ( resp.status === 401 ) {
-                dispatch( getData( [] ) );
+            } else if ( status === 401 ) {
+                dispatch( getData( body ) );
                 dispatch( setStateData( false ) );
                 window.location.reload();
             }
