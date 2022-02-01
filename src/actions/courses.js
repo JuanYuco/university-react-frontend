@@ -208,5 +208,6 @@ export const startDeleteCourseInstructor = ( id ) => {
 
 const courseInstructorTransform = ( data ) => ({
     ...data,
-    Instructor: `${ data.Instructor.FirstMidName } ${ data.Instructor.LastName }`
+    Instructor: `${ data.Instructor.FirstMidName } ${ data.Instructor.LastName }`,
+    Course: data.Course.Title
 });

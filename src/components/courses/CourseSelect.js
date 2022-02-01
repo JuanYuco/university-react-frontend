@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { getCourses } from '../../helpers/Courses';
+import { Select } from '../ui/Select';
 
 export const CourseSelect = ({ value, handleInputChange }) => {
     const [ courses, setCourses ] = useState( [] );
