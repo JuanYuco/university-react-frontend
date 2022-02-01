@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { startDeleteCourseInstructor, startGetCourseInstructor } from '../../actions/courses';
-import { setActiveData, setResetActiveData } from '../../actions/data';
+import { getData, setActiveData, setResetActiveData } from '../../actions/data';
 import { TableStart } from '../table/TableStart';
 import { CourseInstructorsForm } from './CourseInstructorsForm';
 
@@ -37,6 +37,8 @@ export const CourseInstructors = () => {
     useEffect( () => {
         if ( CourseID ) {
             dispatch( startGetCourseInstructor( CourseID ) );
+        } else {
+            dispatch( getData( [], 'secondData' ) );
         }
     }, [ dispatch, CourseID ]);
 
