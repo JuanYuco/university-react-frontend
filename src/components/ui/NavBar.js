@@ -22,6 +22,7 @@ export const NavBar = () => {
                     <CustomNavBar to="/Students" name="Students" />
                     <CustomNavBar to="/OfficesAssignment" name="Offices" />
                     <CustomNavBar to="/Departments" name="Departments" />
+                    <CustomNavBar to="/Enrollment" name="Enrollment" />
                 </div>
             </div>
             <div className="navbar-collapse collapse w-100 order-3 dual-collapse2 d-flex justify-content-end">

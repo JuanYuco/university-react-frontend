@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { CoursesScreen } from '../components/courses/CoursesScreen';
 import { DepartmentScreen } from '../components/departments/DepartmentScreen';
+import { EnrollmentScreen } from '../components/Enrollment/EnrollmentScreen';
 import { InstructorsScreen } from '../components/instructors/InstructorsScreen';
 import { OfficeAssignmentScreen } from '../components/OfficeAssignment/OfficeAssignmentScreen';
 import { StudentsScreen } from '../components/students/StudentsScreen';
@@ -18,6 +19,7 @@ export const DashBoardRouter = () => {
                 <Route path="/Students" element={ <StudentsScreen /> } />
                 <Route path="/OfficesAssignment" element={ <OfficeAssignmentScreen /> } />
                 <Route path="/Departments" element={ <DepartmentScreen /> } />
+                <Route path="/Enrollment" element={ <EnrollmentScreen /> } />
                 <Route path="*" element={ <WelcomeScreen /> } />
             </Routes>
         </>
