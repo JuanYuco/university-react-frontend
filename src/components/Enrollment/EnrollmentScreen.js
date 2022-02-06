@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 import { setActiveData, setResetActiveData } from '../../actions/data';
-import { startGetEnrollment } from '../../actions/Enrollment';
+import { startDeleteEnrollment, startGetEnrollment } from '../../actions/Enrollment';
 import { TableStart } from '../table/TableStart';
 import { EnrollmentForm } from './EnrollmentForm';
 
@@ -16,6 +17,20 @@ export const EnrollmentScreen = () => {
     const setActiveCreate = useCallback( () => {
         dispatch( setResetActiveData() );
     }, [dispatch]);
+
+    const deleteAlert = useCallback( ( enrollment ) => {
+        Swal.fire({
+            title: 'Eliminar Relación',
+            text: `Esta seguro que desea elimnar la relacción`,
+            confirmButtonText: 'Eliminar',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar'
+        }).then( ( result ) => {
+            if ( result.isConfirmed ){
+                dispatch( startDeleteEnrollment( enrollment.EnrollmentID ) );
+            }
+        });
+    }, [ dispatch ]);
 
     useEffect( () => {
         dispatch( startGetEnrollment() );
@@ -33,7 +48,8 @@ export const EnrollmentScreen = () => {
         loading,
         dif: 'Enrollment',
         update: setActiveUpdate,
-        create: setActiveCreate
+        create: setActiveCreate,
+        delete: deleteAlert
     };
     return (
         <div className="m-3 row">

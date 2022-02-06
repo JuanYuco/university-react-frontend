@@ -1,5 +1,6 @@
 import { fetchConToken } from "../helpers/fetch";
 import { closeSwal, loadingSwal, mensajeSwal } from "../helpers/loading";
+import { getStudents } from "../helpers/Students";
 import { createData, deleteData, getData, setStateData, updateData } from "./data"
 
 const url = 'https://localhost:44395/api/Student';
@@ -7,13 +8,12 @@ export const startGetStudents = () => {
     return async ( dispatch ) => {
         dispatch( setStateData( true ) );
         try {
-            const resp = await fetchConToken( `${ url }/GetAll` );
-            if ( resp.status === 200 ) {
-                const body = await resp.json();
+            const { status, data : body } = await getStudents();
+            if ( status === 200 ) {
                 dispatch( getData( body ) );
                 dispatch( setStateData( false ) );
             }
-            else if ( resp.status === 401 ) {
+            else if ( status === 401 ) {
                 window.location.reload();
             } else {
                 dispatch( getData( [] ) );
