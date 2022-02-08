@@ -89,8 +89,9 @@ export const startUpdateEnrollment = ( enrollment ) => {
     }
 }
 
-export const startDeleteEnrollment = ( EnrollmentID ) => {
+export const startDeleteEnrollment = ( enrollment ) => {
     return async ( dispatch ) => {
+        const { EnrollmentID } = enrollment;
         loadingSwal();
         try {
             const resp = await fetchConToken( `${ url }/Delete?id=${ EnrollmentID }`, null, 'DELETE' );

@@ -70,9 +70,10 @@ export const startUpdateCourse = ( course ) => {
     }
 }
 
-export const startDeleteCourse = ( courseId ) => {
+export const startDeleteCourse = ( course ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        const { CourseID: courseId } = course;
         try {
             const resp = await fetchConToken( `https://localhost:44395/api/Course/Delete?id=${ courseId }`, {}, 'DELETE' );
             if ( resp.status === 200 ) {

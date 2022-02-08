@@ -1,13 +1,17 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { resetData } from '../../actions/data';
 
 export const CustomNavBar = ({ to, name }) => {
+    const location = useLocation();
     const dispatch = useDispatch();
 
-    const handleResetData = () => {
-        dispatch( resetData() );
+    const handleResetData = ( e ) => {
+        const href = e.target.href;
+        if ( !href.includes( location.pathname ) ) {
+            dispatch( resetData() );
+        }
     }
 
     return (

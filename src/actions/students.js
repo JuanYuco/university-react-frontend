@@ -76,8 +76,9 @@ export const startUpdateStudent = ( student ) => {
     }
 }
 
-export const startDeleteStudent = ( id ) => {
+export const startDeleteStudent = ( student ) => {
     return async ( dispatch ) => {
+        const { ID: id } = student;
         loadingSwal();
         try {
             const resp = await fetchConToken( `${ url }/Delete?id=${ id }`, {}, 'DELETE' );

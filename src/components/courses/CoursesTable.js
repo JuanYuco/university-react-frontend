@@ -1,40 +1,13 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { startDeleteCourse, startGetCourses } from '../../actions/courses';
 import { CoursesForm } from './CoursesForm';
-import Swal from 'sweetalert2';
-import { setActiveData, setResetActiveData } from '../../actions/data';
 import { TableStart } from '../table/TableStart';
+import { useFormFunctions } from '../../hooks/useFormFunctions';
 
 export const CoursesTable = () => {
-    const dispatch = useDispatch();
+    const [ setActiveCreate, setActiveUpdate, deleteAlert ] = useFormFunctions( startGetCourses, startDeleteCourse, 'active' );
     const { data, loading } = useSelector( state => state.data );
-
-    const setActiveUpdate = useCallback( ( course ) => {
-        dispatch( setActiveData( course ) );
-    },[ dispatch ]);
-
-    const setActiveCreate = useCallback( () => {
-        dispatch( setResetActiveData() );
-    }, [dispatch]);
-
-    const deleteAlert = useCallback( ( course ) => {
-        Swal.fire({
-            title: 'Eliminar Curso',
-            text: `Esta seguro que desea elimnar el curso ${ course.Title }`,
-            confirmButtonText: 'Eliminar',
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar'
-        }).then( ( result ) => {
-            if ( result.isConfirmed ){
-                dispatch( startDeleteCourse( course.CourseID ) );
-            }
-        });
-    }, [ dispatch ]);
-
-    useEffect(() => {
-        dispatch( startGetCourses() );
-    }, [ dispatch ]);
 
     const parameters = {
         properties: [
