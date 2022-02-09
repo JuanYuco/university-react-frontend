@@ -82,9 +82,10 @@ export const startUpdateOfficesAssignment = ( officesAssignment ) => {
     }
 }
 
-export const startDeleteOfficesAssignment = ( id ) => {
+export const startDeleteOfficesAssignment = ( officesAssignment ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        const { InstructorID:id } = officesAssignment;
         try {
             const resp = await fetchConToken( `${ url }/Delete?id=${ id }`, {}, 'DELETE' );
             const { status } = resp;

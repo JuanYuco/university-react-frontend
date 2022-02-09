@@ -1,40 +1,13 @@
-import React, { useCallback, useEffect } from 'react';
-import Swal from 'sweetalert2';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { startDeleteInstructors, startGetInstructors } from '../../actions/instructors';
 import { InstructorsForm } from './InstructorsForm';
-import { setActiveData, setResetActiveData } from '../../actions/data';
 import { TableStart } from '../table/TableStart';
+import { useFormFunctions } from '../../hooks/useFormFunctions';
 
 export const InstructorsTable = () => {
+    const [ setActiveCreate, setActiveUpdate, deleteInstructorAlert ] = useFormFunctions( startGetInstructors, startDeleteInstructors, 'active' );
     const { data, loading } = useSelector( state => state.data );
-    const dispatch = useDispatch();
-
-    const setActiveUpdate = useCallback( ( instructor ) => {
-        dispatch( setActiveData( instructor ) );
-    }, [ dispatch ]);
-
-    const setActiveCreate = useCallback( () => {
-        dispatch( setResetActiveData() );
-    }, [ dispatch ]);
-
-    const deleteInstructorAlert = useCallback( ( instructor ) => {
-        Swal.fire({
-            title: 'Eliminar Instructor',
-            text: `Esta seguro que desea eliminar al instructor de nombre ${ instructor.FirstMidName }`,
-            confirmButtonText: 'Eliminar',
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar'
-        }).then( ( result ) => {
-            if ( result.isConfirmed ) {
-                dispatch( startDeleteInstructors( instructor.ID ) );
-            }
-        });
-    }, [ dispatch ]);
-
-    useEffect( () => {
-        dispatch( startGetInstructors() );
-    }, [ dispatch ]);
 
     const parameters = {
         properties: [

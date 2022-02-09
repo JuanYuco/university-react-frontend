@@ -1,14 +1,20 @@
 import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import { setActiveData, setResetActiveData } from "../actions/data";
+import { getData, setActiveData, setResetActiveData } from "../actions/data";
 
-export const useFormFunctions = ( startGetData, startDelete, propertieName = null ) => {
+export const useFormFunctions = ( startGetData, startDelete, propertieName = null, ID = null, data = null ) => {
     const dispatch = useDispatch();
 
     useEffect( () => {
-        dispatch( startGetData() );
-    }, [ dispatch, startGetData ]);
+        if ( !data ) {
+            dispatch( startGetData() );
+        } else if ( ID ) {
+            dispatch( startGetData( ID ) );
+        }else {
+            dispatch( getData( [], data ) );
+        }
+    }, [ dispatch, startGetData, ID, data ]);
     
     const setActiveUpdate = useCallback( ( data ) => {
         dispatch( setActiveData( data, propertieName ) );

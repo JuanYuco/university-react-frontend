@@ -76,9 +76,10 @@ export const startUpdateInstructors = ( instructor ) => {
     }
 }
 
-export const startDeleteInstructors = ( instructorID ) => {
+export const startDeleteInstructors = ( instructor ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        const { ID:instructorID } = instructor;
         try {
             const resp = await fetchConToken( `${ url }/Delete?id=${ instructorID }`, {}, 'DELETE' );
             if ( resp.status === 200 ) {

@@ -1,46 +1,14 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Swal from 'sweetalert2';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { startDeleteCourseInstructor, startGetCourseInstructor } from '../../actions/courses';
-import { getData, setActiveData, setResetActiveData } from '../../actions/data';
+import { useFormFunctions } from '../../hooks/useFormFunctions';
 import { TableStart } from '../table/TableStart';
 import { CourseInstructorsForm } from './CourseInstructorsForm';
 
-const propertieName = 'secondDataActive';
 export const CourseInstructors = () => {
     const { active, secondData, secondLoading } = useSelector( state => state.data );
     const { CourseID } = active;
-    const dispatch = useDispatch();
-
-    const setActiveUpdate = useCallback( ( courseInstructor ) => {
-        dispatch( setActiveData( courseInstructor, propertieName ) );
-    }, [ dispatch ]);
-
-    const setActiveCreate = useCallback( () => {
-        dispatch( setResetActiveData( propertieName ) );
-    }, [ dispatch ]);
-
-    const startDelete = useCallback( ( courseInstructor ) => {
-        Swal.fire({
-            title: 'Eliminar Instructor del curso',
-            text: `Esta seguro que desea elimnar el instructor ${ courseInstructor.Instructor }`,
-            confirmButtonText: 'Eliminar',
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar'
-        }).then( ( result ) => {
-            if ( result.isConfirmed ){
-                dispatch( startDeleteCourseInstructor( courseInstructor.ID ) );
-            }
-        });
-    }, [ dispatch ]);
-
-    useEffect( () => {
-        if ( CourseID ) {
-            dispatch( startGetCourseInstructor( CourseID ) );
-        } else {
-            dispatch( getData( [], 'secondData' ) );
-        }
-    }, [ dispatch, CourseID ]);
+    const [ setActiveCreate, setActiveUpdate, startDelete ] = useFormFunctions( startGetCourseInstructor, startDeleteCourseInstructor, 'secondDataActive', CourseID, 'SecondData' );
 
     const parameters = {
         properties: [

@@ -1,41 +1,13 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Swal from 'sweetalert2';
-import { setActiveData, setResetActiveData } from '../../actions/data';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { startDeleteDepartment, startGetDepartments } from '../../actions/departments';
+import { useFormFunctions } from '../../hooks/useFormFunctions';
 import { TableStart } from '../table/TableStart';
 import { DepartmentForm } from './DepartmentForm';
 
 export const DepartmentScreen = () => {
+    const [ setActiveCreate, setActiveUpdate, deleteDepartment ] = useFormFunctions( startGetDepartments, startDeleteDepartment, 'active' );
     const { data, loading } = useSelector( state => state.data );
-    const dispatch = useDispatch();
-
-    const setActiveUpdate = useCallback( ( department ) =>  {
-        dispatch( setActiveData( department ) );
-    }, [ dispatch ]);
-
-    const setActiveCreate = useCallback( () => {
-        dispatch( setResetActiveData() );
-    }, [ dispatch ]);
-
-    const deleteDepartment = useCallback( ( department ) => {
-        Swal.fire({
-            title: 'Eliminar Departamento',
-            text: `Esta seguro que desea elimnar el departamento ${ department.Name }`,
-            confirmButtonText: 'Eliminar',
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar'
-        }).then( ( result ) => {
-            if ( result.isConfirmed ){
-                dispatch( startDeleteDepartment( department.DepartmentID ) );
-            }
-        });
-    }, [ dispatch ]);
-
-
-    useEffect( () => {
-        dispatch( startGetDepartments() );
-    }, [ dispatch ]);
 
     const parameters = {
         properties: [

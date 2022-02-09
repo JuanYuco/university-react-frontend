@@ -179,11 +179,11 @@ export const startUpdateCourseInstructor = ( courseInstructor ) => {
     }
 }
 
-export const startDeleteCourseInstructor = ( id ) => {
+export const startDeleteCourseInstructor = ( courseInsturctor ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        const { ID:id } = courseInsturctor;
         try {
-            console.log(id);
             const resp = await fetchConToken( `${ url }/Delete?id=${ id }`, {}, 'DELETE' );
             const { status } = resp;
             if ( status === 401 ) {

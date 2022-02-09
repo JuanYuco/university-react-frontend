@@ -1,40 +1,13 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Swal from 'sweetalert2';
-import { setActiveData, setResetActiveData } from '../../actions/data';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { startDeleteOfficesAssignment, startGetOfficesAssignmnet } from '../../actions/officesAssignment';
+import { useFormFunctions } from '../../hooks/useFormFunctions';
 import { TableStart } from '../table/TableStart';
 import { OfficeAssignmentForm } from './OfficeAssignmentForm';
 
 export const OfficeAssignmentScreen = () => {
+    const [ setActiveCreate, setActiveUpdate, deleteOfficeAssignment ] = useFormFunctions( startGetOfficesAssignmnet, startDeleteOfficesAssignment, 'active' );
     const { data, loading } = useSelector( state => state.data );
-    const dispatch = useDispatch();
-
-    const setActiveUpdate = useCallback( ( officesAssignment ) => {
-        dispatch( setActiveData( officesAssignment ) );
-    }, [ dispatch ]);
-
-    const setActiveCreate = useCallback( () => {
-        dispatch( setResetActiveData() );
-    }, [ dispatch ] );
-
-    const deleteOfficeAssignment = useCallback( ( OfficeAssignment ) => {
-        Swal.fire({
-            title: 'Eliminar Oficina',
-            text: `Esta seguro que desea elimnar la oficina ${ OfficeAssignment.Location }`,
-            confirmButtonText: 'Eliminar',
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar'
-        }).then( ( result ) => {
-            if ( result.isConfirmed ){
-                dispatch( startDeleteOfficesAssignment( OfficeAssignment.InstructorID ) );
-            }
-        });
-    }, [ dispatch ]);
-
-    useEffect( () => {
-        dispatch( startGetOfficesAssignmnet() );
-    }, [ dispatch ]);
 
     const parameters = {
         properties: [

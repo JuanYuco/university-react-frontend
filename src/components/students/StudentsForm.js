@@ -1,35 +1,22 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { startCreateStudent, startUpdateStudent } from '../../actions/students';
-import { useForm } from '../../hooks/useForm';
+import { useFormSubmit } from '../../hooks/useFormSubmit';
 
 const initialForm = {
-    ID: '',
+    ID: 0,
     FirstMidName: '',
     LastName: '',
     EnrollmentDate: ''
 };
 
 export const StudentsForm = () => {
-    const dispatch = useDispatch();
-    const active = useSelector( state => state.data.active );
-    const newActive = ( active.hasOwnProperty( 'ID' ) ) ? active : initialForm;
-    const [ { ID, FirstMidName, LastName, EnrollmentDate }, handleInputChange, setFormValues ] = useForm( newActive );
-
-    const handleSubmit = ( e ) => {
-        e.preventDefault();
-
-        if ( !ID ) {
-            dispatch( startCreateStudent( { FirstMidName, LastName, EnrollmentDate } ) );
-            return;
-        }
-
-        dispatch( startUpdateStudent( { ID, FirstMidName, LastName, EnrollmentDate } ) );
-    }
-
-    useEffect( () => {
-        setFormValues( ( values ) => ({ ...values, ...newActive }) );
-    }, [ newActive, setFormValues ]);
+    const [ { ID, FirstMidName, LastName, EnrollmentDate }, handleInputChange, handleSubmit ] = useFormSubmit( 
+        'ID',
+        'active',
+        initialForm,
+        startCreateStudent,
+        startUpdateStudent
+    );
 
     const title = ( ID ) ? 'Update' : 'Create';
     return (
