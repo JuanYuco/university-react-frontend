@@ -1,36 +1,17 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { startCreateInstructors, startUpdateInstructors } from '../../actions/instructors';
-import { useForm } from '../../hooks/useForm';
+import { useFormSubmit } from '../../hooks/useFormSubmit';
 
 const initialForm = {
-    ID: '',
+    ID: 0,
     LastName: '',
     FirstMidName: '',
     HireDate: ''
 };
 
 export const InstructorsForm = () => {
-    const dispatch = useDispatch();
-    const active = useSelector( state => state.data.active );
-    const newActive = active.hasOwnProperty('ID') ? active : initialForm;
-    const [ { ID, FirstMidName, LastName, HireDate }, handleInputChange, setFormValues ] = useForm( newActive );
-
-    const handleSubmit = ( e ) => {
-        e.preventDefault();
-        if ( !ID ) {
-            dispatch( startCreateInstructors( { FirstMidName, LastName, HireDate } ) );
-            return;
-        }
-
-        dispatch( startUpdateInstructors( { ID, FirstMidName, LastName, HireDate } ) );
-    }
-
-    useEffect( () => { 
-        setFormValues( ( values ) => ({ ...values, ...newActive }) );
-    }, [ setFormValues, newActive ]);
-
-    const titulo = ( active.ID ) ? 'Update' : 'Create';
+    const [ { ID, FirstMidName, LastName, HireDate }, handleInputChange, handleSubmit ] = useFormSubmit( 'ID', 'active', initialForm, startCreateInstructors, startUpdateInstructors );
+    const titulo = ( ID ) ? 'Update' : 'Create';
 
     return (
         <form onSubmit={ handleSubmit }>

@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { startCreateCourseInstructor, startUpdateCourseInstructor } from '../../actions/courses';
-import { useForm } from '../../hooks/useForm';
+import { useFormSubmit } from '../../hooks/useFormSubmit';
 import { CourseSelect } from '../courses/CourseSelect';
 
 const initialForm = {
@@ -11,24 +10,8 @@ const initialForm = {
 };
 
 export const InstructorCoursesForm = ({ InstructorID }) => {
-    const dispatch = useDispatch();
-    const active = useSelector( state => state.data.secondDataActive );
-    const newActive = ( active ) && active.hasOwnProperty('ID') ? active : initialForm;
-    const [ { ID, CourseID }, handleInputChange, setFormValues ]  = useForm( newActive );
+    const [ { CourseID }, handleInputChange, handleSubmit ] = useFormSubmit( 'ID', 'secondDataActive', initialForm, startCreateCourseInstructor, startUpdateCourseInstructor, { InstructorID } );
 
-    const handleSubmit = ( e ) => {
-        e.preventDefault();
-        if ( !ID ) {
-            dispatch( startCreateCourseInstructor( { ID, CourseID, InstructorID } ) );
-            return;
-        }
-
-        dispatch( startUpdateCourseInstructor( { ID, CourseID, InstructorID } ) );
-    }
-    
-    useEffect( () => {
-        setFormValues( ( values ) => ( { ...values, ...newActive } ) );
-    }, [ setFormValues, active, newActive ])
     return (
         <form onSubmit={ handleSubmit }>
             <h3>Create Course for Instrutor</h3>

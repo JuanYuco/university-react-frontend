@@ -31,6 +31,7 @@ export const startGetOfficesAssignmnet = () => {
 export const startCreateOfficesAssignment = ( officesAssignment ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        delete officesAssignment.Instructor;
         try {
             const resp = await fetchConToken( `${ url }/Create`, officesAssignment, 'POST' );
             const { status } = resp;
@@ -58,6 +59,7 @@ export const startCreateOfficesAssignment = ( officesAssignment ) => {
 export const startUpdateOfficesAssignment = ( officesAssignment ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        delete officesAssignment.Instructor;
         try {
             const resp = await fetchConToken( `${ url }/Update`, officesAssignment, 'PUT' );
             const { status } = resp;

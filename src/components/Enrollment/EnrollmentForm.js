@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { startCreateEnrollment, startUpdateEnrollment } from '../../actions/Enrollment';
-import { useForm } from '../../hooks/useForm';
+import { useFormSubmit } from '../../hooks/useFormSubmit';
 import { CourseSelect } from '../courses/CourseSelect';
 import { StudentsSelect } from '../students/StudentsSelect';
 
@@ -12,30 +11,11 @@ const initialForm = {
     Grade: ''
 };
 export const EnrollmentForm = () => {
-    const dispatch = useDispatch();
-    const { active } = useSelector( state => state.data );
-    const newActive = active.hasOwnProperty('EnrollmentID') ? active : initialForm;
-    const [ { EnrollmentID, CourseID, Grade, StudentID }, handleInputChange, setFormValues ] = useForm( newActive );
-
-    useEffect( () => {
-        setFormValues( value => ({ ...value, ...newActive }) );
-    }, [ newActive, setFormValues ]);
-
-    const handleSubmit = ( e ) => {
-        e.preventDefault();
-
-        const enrollment = { EnrollmentID, CourseID, StudentID, Grade };
-        if ( !EnrollmentID ) {
-            dispatch( startCreateEnrollment( enrollment ) );
-            return;
-        }
-
-        dispatch( startUpdateEnrollment( enrollment ) );
-    }
+    const [ { CourseID, Grade, StudentID }, handleInputChange, handleSubmit ] = useFormSubmit( 'EnrollmentID', 'active', initialForm, startCreateEnrollment, startUpdateEnrollment );
 
     return (
         <form onSubmit={ handleSubmit }>
-            <h3>Create Enrollment</h3>
+            <h3>Enrollment Form</h3>
             <h6 className="mb-0">Course</h6>
             <CourseSelect
                 value={ CourseID }

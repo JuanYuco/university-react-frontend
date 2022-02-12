@@ -126,6 +126,7 @@ export const startGetCourseInstructor = ( CourseID ) => {
 export const startCreateCourseInstructor = ( courseInstructor ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        delete courseInstructor.Course;
         try {
             const resp = await fetchConToken( `${ url }/Create`, courseInstructor, 'POST' );
             const { status } = resp;
@@ -154,6 +155,8 @@ export const startCreateCourseInstructor = ( courseInstructor ) => {
 export const startUpdateCourseInstructor = ( courseInstructor ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        delete courseInstructor.Course;
+        delete courseInstructor.Instructor;
         try {
             const resp = await fetchConToken( `${ url }/Update`, courseInstructor, 'PUT' );
             const { status } = resp;

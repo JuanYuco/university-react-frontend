@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { startCreateOfficesAssignment, startUpdateOfficesAssignment } from '../../actions/officesAssignment';
-import { useForm } from '../../hooks/useForm';
+import { useFormSubmit } from '../../hooks/useFormSubmit';
 import { InstructorSelect } from '../instructors/InstructorSelect';
 
 const initialForm = {
@@ -10,30 +9,11 @@ const initialForm = {
 }
 
 export const OfficeAssignmentForm = () => {
-    const dispatch = useDispatch();
-    const active = useSelector( state => state.data.active );
-    const newActive = active.hasOwnProperty('InstructorID') ? active : initialForm;
-    const [ { InstructorID, Location }, handleInputChange, setFormValues ] = useForm( newActive );
+    const [ { InstructorID, Location }, handleInputChange, handleSubmit ] = useFormSubmit( 'InstructorID', 'active', initialForm, startCreateOfficesAssignment, startUpdateOfficesAssignment );
 
-    const handleSubmit = ( e ) => {
-        e.preventDefault();
-        
-        if ( !active.InstructorID ) {
-            dispatch( startCreateOfficesAssignment( { InstructorID, Location } ) );
-            return;
-        }
-
-        dispatch( startUpdateOfficesAssignment( { InstructorID, Location } ) );
-    }
-
-    useEffect( () =>  {
-        setFormValues( value => ({ ...value, ...newActive }) );
-    }, [ newActive, setFormValues ]);
-
-    const title = ( active.InstructorID ) ? "Update" : "Create";
     return (
         <form onSubmit={ handleSubmit }>
-            <h3>{ title } Offices</h3>
+            <h3>Offices Form</h3>
             <h6 className="mb-0">Instructor</h6>
             <InstructorSelect
                 value={ InstructorID }

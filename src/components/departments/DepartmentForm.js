@@ -1,41 +1,21 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { startCreateDepartment, startUpdateDepartment } from '../../actions/departments';
-import { useForm } from '../../hooks/useForm';
+import { useFormSubmit } from '../../hooks/useFormSubmit';
 import { InstructorSelect } from '../instructors/InstructorSelect';
 
 const initialForm = {
-    DepartmentID: '',
+    DepartmentID: 0,
     Name: '',
     Budget: '',
     StartDate: '',
     InstructorID: ''
 }
 export const DepartmentForm = () => {
-    const dispatch = useDispatch();
-    const active = useSelector( state => state.data.active );
-    const newActive = active.hasOwnProperty('DepartmentID') ? active : initialForm;
-    const [ { DepartmentID, Name, Budget, StartDate, InstructorID }, handleInputChange, setFormValues ] = useForm( newActive );
+    const [ { Name, Budget, StartDate, InstructorID }, handleInputChange, handleSubmit ] = useFormSubmit( 'DepartmentID', 'active', initialForm, startCreateDepartment, startUpdateDepartment );
 
-    const handleSubmit = ( e ) => {
-        e.preventDefault();
-
-        if ( !DepartmentID ) {
-            dispatch( startCreateDepartment( { Name, Budget, StartDate, InstructorID } ) );
-            return;
-        }
-
-        dispatch( startUpdateDepartment( { DepartmentID, Name, Budget, StartDate, InstructorID } ) );
-    }
-
-    useEffect( () => {
-        setFormValues( newActive );
-    }, [ setFormValues, newActive ]);
-
-    const title = ( active.DepartmentID ) ? 'Update' : 'Create';
     return (
         <form onSubmit={ handleSubmit }>
-            <h3>{ title } Department</h3>
+            <h3>Department Form</h3>
             <h6 className="mb-0">Name</h6>
             <input
                 type="text"

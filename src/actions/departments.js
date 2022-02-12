@@ -30,6 +30,7 @@ export const startGetDepartments = () => {
 export const startCreateDepartment = ( department ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        delete department.Instructor;
         try {
             const resp = await fetchConToken( `${ url }/Create`, department, 'POST' );
             const { status } = resp;
@@ -59,6 +60,7 @@ export const startCreateDepartment = ( department ) => {
 export const startUpdateDepartment = ( department ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        delete department.Instructor;
         try {
             const resp = await fetchConToken( `${ url }/Update`, department, 'PUT' );
             const { status } = resp;

@@ -34,6 +34,8 @@ export const startGetEnrollment = () => {
 export const startCreateEnrollment = ( enrollment ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        delete enrollment.Course;
+        delete enrollment.Student;
         try {
             const resp = await fetchConToken( `${ url }/Create`, enrollment, 'POST' );
             const { status } = resp;
@@ -63,6 +65,8 @@ export const startCreateEnrollment = ( enrollment ) => {
 export const startUpdateEnrollment = ( enrollment ) => {
     return async ( dispatch ) => {
         loadingSwal();
+        delete enrollment.Course;
+        delete enrollment.Student;
         try {
             const resp = await fetchConToken( `${ url }/Update`, enrollment, 'PUT' );
             const { status } = resp;
