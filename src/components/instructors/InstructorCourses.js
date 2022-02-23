@@ -25,12 +25,13 @@ export const InstructorCourses = () => {
         delete: startDelete
     }
 
+    if ( !ID ) {
+        return <></>;
+    }
+    
     return (
         <>
-            {
-                ( ID ) &&
-                <h3 className="m-3">Cursos del instructor { `${ FirstMidName } ${ LastName }` }</h3>
-            }
+            <h3 className="m-3">Cursos del instructor { `${ FirstMidName } ${ LastName }` }</h3>
             <div className="m-3 row">
                 <div className="col-6">
                     <TableStart parameters={ parameters } />

@@ -7,7 +7,7 @@ import { CourseInstructorsForm } from './CourseInstructorsForm';
 
 export const CourseInstructors = () => {
     const { active, secondData, secondLoading } = useSelector( state => state.data );
-    const { CourseID } = active;
+    const { CourseID, Title } = active;
     const [ setActiveCreate, setActiveUpdate, startDelete ] = useFormFunctions( startGetCourseInstructor, startDeleteCourseInstructor, 'secondDataActive', CourseID, 'SecondData' );
 
     const parameters = {
@@ -23,14 +23,22 @@ export const CourseInstructors = () => {
         create: setActiveCreate,
         delete: startDelete
     };
+
+    if ( !CourseID ) {
+        return <></>;
+    }
+
     return (
-        <div className="m-3 row">
-            <div className="col-6">
-                <TableStart  parameters={ parameters } />
+        <>
+            <h3 className="m-3">Instructores del curso { Title }</h3>
+            <div className="m-3 row">
+                <div className="col-6">
+                    <TableStart  parameters={ parameters } />
+                </div>
+                <div className="col-6">
+                    <CourseInstructorsForm CourseID={ CourseID }/>
+                </div>
             </div>
-            <div className="col-6">
-                <CourseInstructorsForm CourseID={ CourseID }/>
-            </div>
-        </div>
+        </>
     )
 }

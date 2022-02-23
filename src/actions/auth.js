@@ -90,9 +90,7 @@ export const startValidate = () => {
             if ( resp.status === 200 ) {
                 const body = await resp.json();
                 dispatch( validate( body ) );
-            } else if ( resp.status === 401 ) {
-                dispatch( startLogout() );
-            } else if ( resp.status === 500 ) {
+            } else if ( resp.status === 401 || resp.status === 500 ) {
                 dispatch( startLogout() );
             }
         } catch ( error ) {
